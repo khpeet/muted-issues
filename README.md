@@ -3,6 +3,7 @@
 This utility will automatically close **fully muted** issues that are still open after a muting window's period ends, allowing for notifications to re-trigger for those previously muted issues.
 
 **NOTE**
+
 Host not reporting or signal loss triggered conditions will not be auto-closed. If no data is still not reporting back to New Relic post muting window, then closing that issue will not automatically re-trigger an issue. These cases are handled by writing a separate event back to New Relic, on each execution of this utility, under the **`SignalLossPersistAfterMutingWindow`** eventType. This can be used to generate NRQL alerts and will represent data is _still_ not reporting for any entities, after a muting period ends.
 
 ## Requirements
