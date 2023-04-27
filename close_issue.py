@@ -17,15 +17,6 @@ class CloseOpenIssue():
         return res
 
 
-          #       {
-          # "data": {
-          #   "aiIssuesResolveIssue": {
-          #     "error": "internal error while processing the request - routingKey is null",
-          #     "result": null
-          #   }
-          # }
-
-
     def closeIssue(self, accountId, issueToClose):
         mutation = f'''
             mutation {{

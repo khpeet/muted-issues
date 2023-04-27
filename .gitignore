@@ -5,3 +5,4 @@ __pycache__/
 env/
 ENV/
 .mypy_cache/
+muting.log

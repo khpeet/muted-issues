@@ -22,6 +22,7 @@ def main():
     getIssues = GetOpenIssues(API_KEY, ACCOUNTID)
     closeIssue = CloseOpenIssue(API_KEY)
     results = []
+    signalLossResults = []
 
     try:
         rules = getRules.getMutingRules()
@@ -35,15 +36,24 @@ def main():
                         inc_num = round(incident['mutingId'])
                         if (mutingId == inc_num):
                             incidentId = incident['incidentId']
-                            for issue in issues:
-                                if (incidentId in issue['incidentIds']):
-                                    issueId = issue['issueId']
-                                    closeResult = closeIssue.closeIssue(ACCOUNTID, issueId)
-                                    results.append({'eventType': 'CloseMutedIssueResult', 'conditionName': incident['conditionName'], 'policyName': incident['policyName'], 'issueId': issueId, 'closeResult': closeResult})
+                            evalType = incident['evalType']
+                            if (evalType != 'expiration'): #don't auto-close signal loss incidents
+                                for issue in issues:
+                                    if (incidentId in issue['incidentIds']):
+                                        issueId = issue['issueId']
+                                        closeResult = closeIssue.closeIssue(ACCOUNTID, issueId)
+                                        results.append({'eventType': 'CloseMutedIssueResult', 'conditionName': incident['conditionName'], 'policyName': incident['policyName'], 'issueId': issueId, 'closeResult': closeResult})
+                            else:
+                                signalLossResults.append({'eventType': 'SignalLossPersistAfterMutingWindow', 'conditionName': incident['conditionName'], 'policyName': incident['policyName'], 'incidentId': incidentId, 'targetName': incident['target']})
         if (len(results) > 0):
             postResults(results)
         else:
-            logging.info('No results to post.')
+            logging.info('No close results to post.')
+
+        if (len(signalLossResults) > 0):
+            postResults(signalLossResults)
+        else:
+            logging.info('No signal loss results to post.')
     except Exception as e:
         raise
         sys.exit(1)
