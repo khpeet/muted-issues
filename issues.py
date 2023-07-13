@@ -13,7 +13,7 @@ class GetOpenIssues():
             {{
               actor {{
                 account(id: {accountId}) {{
-                  nrql(query: "SELECT incidentIds, issueId FROM (FROM NrAiIssue SELECT uniqueCount(event) as 'total', latest(event) as 'state', latest(muted) as 'muted' where event in ('activate', 'create', 'close') facet issueId, incidentIds limit max) where total = 2 and state = 'activate' and muted = 'fullyMuted' limit max since 1 day ago") {{
+                  nrql(timeout: 90, query: "SELECT incidentIds, issueId FROM (FROM NrAiIssue SELECT uniqueCount(event) as 'total', latest(event) as 'state', latest(muted) as 'muted' where event in ('activate', 'create', 'close') facet issueId, incidentIds limit max) where total = 2 and state = 'activate' and muted = 'fullyMuted' limit max since 1 day ago") {{
                     results
                   }}
                 }}
