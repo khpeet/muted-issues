@@ -44,14 +44,18 @@ def main():
                                         closeResult = closeIssue.closeIssue(ACCOUNTID, issueId)
                                         results.append({'eventType': 'CloseMutedIssueResult', 'conditionName': incident['conditionName'], 'policyName': incident['policyName'], 'issueId': issueId, 'closeResult': closeResult})
                             else:
-                                signalLossResults.append({'eventType': 'SignalLossPersistAfterMutingWindow', 'conditionName': incident['conditionName'], 'policyName': incident['policyName'], 'incidentId': incidentId, 'targetName': incident['target']})
+                                signalLossResults.append({'eventType': 'SignalLossPersistAfterMutingWindow', 'conditionName': incident['conditionName'], 'policyName': incident['policyName'], 'incidentId': incidentId, 'targetName': incident['target'], 'entity': incident['entity'], 'app_support_team': incident['app_support_team']})
         if (len(results) > 0):
             postResults(results)
+            # logging.debug('Results')
+            # logging.debug(results)
         else:
             logging.info('No close results to post.')
 
         if (len(signalLossResults) > 0):
             postResults(signalLossResults)
+            # logging.debug('SigLossResults')
+            # logging.debug(results)
         else:
             logging.info('No signal loss results to post.')
     except Exception as e:
